@@ -125,7 +125,6 @@ class View {
         }
         
         $this->_template = [$template, $layout, $module, 'data' => $data];
-        
         return $this;
     }
     
@@ -190,14 +189,15 @@ class View {
             
             if($this->_filename) $file = $this->_filename . '.php';
             
-            $file = APPPATH . 'cache/' . $file;
+            $viewName = $file;
+            
+            $file = (is_dir(APPPATH . 'cache/views/') ? APPPATH . 'cache/views/' : APPPATH . 'cache/') . $file;
             
             if($this->_useCache && is_file($file))
             {
                 if((time() - filemtime($file)) <= (is_bool($this->_useCache) ? 0 : $this->_useCache))
                 {
-                    extract($this->_template['data']);
-                    require $file;
+                    $this->_output($viewName);
                     return;
                 }
             }
@@ -215,18 +215,14 @@ class View {
             $this->_mainContent = [$view, $data];
 
             ob_start();
-
             $this->_view(
                 $this->_viewLayout($this->_template),
                 $this->_template['data']
             );
-            
             $output = $this->_simpleParser(ob_get_clean());
-            
             file_put_contents($file, $output);
             
-            extract($this->_template['data']);
-            require $file;
+            $this->_output($viewName, $file);
             return;
         }
         
@@ -252,6 +248,31 @@ class View {
     protected function _view($view, $data=[], $optional=false)
     {
         return $this->_ci->load->view($view, $data, $optional);
+    }
+    
+    /**
+     *  ...
+     *  
+     *  @param  string  $view  (required)
+     *  @param  string  $file  (required)
+     *  @return void
+     */
+    protected function _output($view, $file)
+    {
+        $path = APPPATH . 'cache';
+        $data = $this->_template['data'];
+        
+        if(is_dir($path . DIRECTORY_SEPARATOR . 'views'))
+        {
+            $this->_ci->load
+                ->add_package_path($path)
+                ->view($view, $data);
+            $this->_ci->load->remove_package_path($path);
+            return;
+        }
+        
+        extract($data);
+        require $file;
     }
     
     /**
