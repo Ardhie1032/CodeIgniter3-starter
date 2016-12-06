@@ -1,0 +1,1 @@
+<?= $this->view->partial('welcome_message', [], true) ?>
