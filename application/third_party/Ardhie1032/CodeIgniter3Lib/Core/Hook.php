@@ -13,11 +13,7 @@ class Hook extends \CI_Hooks {
             $cfg =& load_class('Config', 'core');
             $cfg->load('classmap');
             $loader = new Autoloader;
-            
-            $loader->addNamespaces([
-                'Ardhie1032' => APPPATH . 'third_party/Ardhie1032/',
-            ] + $cfg->item('register_namespaces'));
-            
+            $loader->addNamespaces($cfg->item('register_namespaces'));
             $loader->addClasses($cfg->item('register_classes'));
             $loader->register();
         }
