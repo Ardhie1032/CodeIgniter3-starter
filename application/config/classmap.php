@@ -1,7 +1,10 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
 $config['register_namespaces'] = [
+    // Do not remove!!!
+    'Ardhie1032' => APPPATH . 'third_party/Ardhie1032/',
     'App'    => APPPATH,
+    // Optional
     //'Module' => APPPATH . 'modules/',
     // 'prefix' => 'path_directory',
 ];
