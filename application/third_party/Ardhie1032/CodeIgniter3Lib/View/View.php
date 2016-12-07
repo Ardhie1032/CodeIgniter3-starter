@@ -38,7 +38,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class View {
     
     /**
-     *  
+     *  All private methods
      */
     private
         $_ci,
@@ -56,6 +56,8 @@ class View {
     
     /**
      *  Constructor
+     *  
+     *  @return void
      */
     public function __construct()
     {
@@ -86,6 +88,8 @@ class View {
     }
     
     /**
+     *  Cache (Full) View
+     *  
      *  @return object   Method chaining
      */
     public function cache($useCache=true, $filename=false)
@@ -129,7 +133,9 @@ class View {
     }
     
     /**
-     *  @param  $name   string  Default null as default content
+     *  @param  $name  string  (optional) Default null as default content
+     *  
+     *  @return void
      */
     public function content($name=null)
     {
@@ -155,7 +161,9 @@ class View {
     }
     
     /**
+     *  ....
      *  
+     *  @param  bool    $module   (optional) Default false
      *  @return string
      */
     private function _viewPath($module=false)
@@ -173,8 +181,10 @@ class View {
     }
     
     /**
-     *  @param  string  $view
-     *  @param  array   $data
+     *  @param  string  $view  (optional)
+     *  @param  array   $data  (optional)
+     *  
+     *  @return string
      */
     public function render($view=null, $data=[])
     {
@@ -242,8 +252,10 @@ class View {
     /**
      *  ...
      *  
-     *  @param  string  (required)
-     *  @return void
+     *  @param  string    $view      (required)
+     *  @param  array     $data      (optional)
+     *  @param  boolean   $optional  (optional)
+     *  @return string
      */
     protected function _view($view, $data=[], $optional=false)
     {
@@ -270,12 +282,13 @@ class View {
             $this->_ci->load->remove_package_path($path);
             return;
         }
-        
         extract($data);
         require $file;
     }
     
     /**
+     *  ....
+     *  
      *  @param  $template   false   
      *  @param  $layout     false
      *  @param  $module     false
@@ -315,9 +328,9 @@ class View {
     }
     
     /**
-     *  ...
+     *  Widget
      *  
-     *  @param  string  $ns     (Required) Namespace without shortname
+     *  @param  string  $ns  (Required) Namespace without shortname
      *  @return void
      */
     public function widget($ns, $data = [], $default = false)
@@ -351,6 +364,8 @@ class View {
     
     /**
      *  Simple Parser
+     *  
+     *  @return string
      */
     private function _simpleParser($text)
     {
@@ -394,7 +409,11 @@ class View {
     }
     
     /**
+     *  Setter
      *  
+     *  @param  string  $name  Name, required
+     *  @param  mixed   $val   Value, required
+     *  @return object
      */
     public function __set($name, $val)
     {
@@ -403,7 +422,10 @@ class View {
     }
     
     /**
+     *  Getter
      *  
+     *  @param  string  $name  required
+     *  @return object
      */
     public function __get($name)
     {
@@ -411,7 +433,10 @@ class View {
     }
     
     /**
+     *  Set name
      *  
+     *  @param  string  $name  required
+     *  @return object
      */
     public function data($name)
     {
@@ -421,6 +446,9 @@ class View {
     
     /**
      *  Set Data
+     *  
+     *  @param  array  $data  Default an empty array
+     *  @return void
      */
     public function set($data=[])
     {
@@ -428,7 +456,7 @@ class View {
     }
     
     /**
-     *  Default
+     *  Set Default
      */
     public function def($data=[])
     {
@@ -441,7 +469,12 @@ class View {
      */
     public function get()
     {
-        return $this->_data[$this->_name] ?? $this->_def[$this->_name] ?? null;
+        return // PHP version < 7.x => WTF
+            !is_null($this->_data[$this->_name]) 
+            ? $this->_def[$this->_name] 
+            : !is_null($this->_def[$this->_name]) 
+                ? $this->_def[$this->_name] 
+                : null;
     }
     
 }
