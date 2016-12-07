@@ -176,6 +176,7 @@ $config['templates'] = [
     'bootstrap' => 'bootstrap',
 ];
 
+$config['cache'] = 300;
 ```
 
 ## Widget
