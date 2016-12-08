@@ -2,7 +2,7 @@
 
 $config['register_namespaces'] = [
     // Do not remove!!!
-    'Ardhie1032' => APPPATH . 'third_party/Ardhie1032/',
+    'Ardhie1032\CodeIgniter3Lib' => 'phar://'. APPPATH . '../CodeIgniter3Lib.phar',
     'App'    => APPPATH,
     // Optional
     //'Module' => APPPATH . 'modules/',
